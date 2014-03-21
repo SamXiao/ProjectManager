@@ -12,6 +12,12 @@ namespace Album;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
+use Album\Model\Project;
+use Album\Model\ProjectTable;
+use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\TableGateway\TableGateway;
+
+
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
     public function getAutoloaderConfig()
@@ -32,4 +38,25 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
     {
         return include __DIR__ . '/config/module.config.php';
     }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Album\Model\ProjectTable' =>  function($sm) {
+                    $tableGateway = $sm->get('ProjectTableGateway');
+                    $table = new ProjectTable($tableGateway);
+                    return $table;
+                },
+                'ProjectTableGateway' => function ($sm) {
+                    $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Project());
+                    return new TableGateway('pm_project', $dbAdapter, null, $resultSetPrototype);
+                },
+            ),
+        );
+    }
+
+
 }

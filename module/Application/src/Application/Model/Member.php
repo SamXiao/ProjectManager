@@ -1,5 +1,5 @@
 <?php
-namespace Album\Model;
+namespace Application\Model;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
 use Zend\InputFilter\InputFilter;

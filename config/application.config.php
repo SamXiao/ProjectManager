@@ -4,6 +4,9 @@ return array(
     'modules' => array(
         'Application',
         'Album',
+        'ZendDeveloperTools',
+        'BjyProfiler',
+    	'CodeGenerator'
     ),
 
     // These are various options for the listeners attached to the ModuleManager

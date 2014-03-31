@@ -1,5 +1,5 @@
 <?php
-namespace Album\Form;
+namespace CodeGenerator\Form;
 
 use Zend\Form\Form;
 
@@ -12,35 +12,31 @@ class ModelForm extends Form
         parent::__construct('album');
 
         $this->add(array(
-            'name' => 'id',
-            'type' => 'Hidden'
-        ));
-        $this->add(array(
-            'name' => 'name',
+            'name' => 'table_name',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Title'
+                'label' => 'Table Name'
             )
         ));
         $this->add(array(
-            'name' => 'description',
+            'name' => 'model_class',
             'type' => 'Text',
             'options' => array(
-                'label' => 'Artist'
+                'label' => 'Model Class'
             )
         ));
         $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(
-                'value' => 'Go',
+                'value' => 'Perview',
                 'id' => 'submitbutton'
             )
         ));
     }
-    
+
     public function getInputFilter()
     {
-    	
+
     }
 }

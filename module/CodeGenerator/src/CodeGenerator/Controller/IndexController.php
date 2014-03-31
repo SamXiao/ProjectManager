@@ -5,6 +5,8 @@ namespace CodeGenerator\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use CodeGenerator\Form\ModelForm;
+use Zend\ServiceManager\ServiceManager;
+use Zend\Db\Metadata\Metadata;
 
 class IndexController extends AbstractActionController {
 	public function indexAction() {
@@ -14,12 +16,10 @@ class IndexController extends AbstractActionController {
 	public function modelAction() {
 		$message = '';
 		$form = new ModelForm();
-		$form->get('submit')->setValue('Add');
-
 		$request = $this->getRequest();
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
-
+			$this->getTabelCols($form->get('table_name')->getValue());
 			if ($form->isValid()) {
 				$message = 'Yes';
 			}
@@ -28,5 +28,13 @@ class IndexController extends AbstractActionController {
 				'message' => $message,
 				'form' => $form
 		);
+	}
+
+	public function getTabelCols( $tableName ){
+		$dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+
+		$metadata = new Metadata($dbAdapter);
+		$table = $metadata->getTable($tableName);
+		print_r($table->getColumns());
 	}
 }

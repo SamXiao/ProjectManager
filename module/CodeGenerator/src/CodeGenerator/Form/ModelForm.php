@@ -37,6 +37,6 @@ class ModelForm extends Form
 
     public function getInputFilter()
     {
-
+		return array();
     }
 }

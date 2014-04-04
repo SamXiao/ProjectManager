@@ -6,7 +6,8 @@ return array(
         'Album',
         'ZendDeveloperTools',
         'BjyProfiler',
-    	'CodeGenerator'
+    	'CodeGenerator',
+        'BootsrapView',
     ),
 
     // These are various options for the listeners attached to the ModuleManager
@@ -51,6 +52,7 @@ return array(
         // that weren't loaded.
         // 'check_dependencies' => true,
     ),
+
 
     // Used to create an own service manager. May contain one or more child arrays.
     //'service_listener_options' => array(

@@ -5,8 +5,8 @@ namespace CodeGenerator\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use CodeGenerator\Form\ModelForm;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Db\Metadata\Metadata;
+use Album\Form\ProjectForm;
 
 class IndexController extends AbstractActionController {
 	public function indexAction() {
@@ -24,6 +24,7 @@ class IndexController extends AbstractActionController {
 				$message = 'Yes';
 			}
 		}
+		new  ProjectForm();
 		return array(
 				'message' => $message,
 				'form' => $form

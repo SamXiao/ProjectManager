@@ -43,4 +43,11 @@ return array(
             'album' => __DIR__ . '/../view',
         ),
     ),
+
+    'view_helpers' => array(
+        'invokables' => array(
+            'formRow' => 'BootsrapView\Form\View\Helper\FormRow',
+        ),
+    ),
+
 );

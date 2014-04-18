@@ -20,11 +20,8 @@ class IndexController extends AbstractActionController {
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
 			$this->getTabelCols($form->get('table_name')->getValue());
-			if ($form->isValid()) {
-				$message = 'Yes';
-			}
+			$message = 'Yes';
 		}
-		new  ProjectForm();
 		return array(
 				'message' => $message,
 				'form' => $form
@@ -36,6 +33,6 @@ class IndexController extends AbstractActionController {
 
 		$metadata = new Metadata($dbAdapter);
 		$table = $metadata->getTable($tableName);
-		print_r($table->getColumns());
+		return $table->getColumns();
 	}
 }

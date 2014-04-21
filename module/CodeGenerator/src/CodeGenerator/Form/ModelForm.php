@@ -26,6 +26,13 @@ class ModelForm extends Form
             )
         ));
         $this->add(array(
+            'name' => 'namespace',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'Namespace'
+            )
+        ));
+        $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(

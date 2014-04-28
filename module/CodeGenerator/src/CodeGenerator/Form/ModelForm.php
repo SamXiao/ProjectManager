@@ -33,6 +33,13 @@ class ModelForm extends Form
             )
         ));
         $this->add(array(
+            'name' => 'path',
+            'type' => 'Text',
+            'options' => array(
+                'label' => 'File Path'
+            )
+        ));
+        $this->add(array(
             'name' => 'submit',
             'type' => 'Submit',
             'attributes' => array(

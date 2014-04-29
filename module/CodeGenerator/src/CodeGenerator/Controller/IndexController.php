@@ -2,14 +2,14 @@
 namespace CodeGenerator\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
 use CodeGenerator\Form\ModelForm;
 use Zend\Db\Metadata\Metadata;
 use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Reflection\FileReflection;
-use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Generator\FileGenerator;
 use Zend\Code\Generator\MethodGenerator;
+use Zend\Code\Generator\ParameterGenerator;
+use CodeGenerator\Service\ModelGenerator;
+use CodeGenerator\Service\ModelMapperGenerator;
 
 class IndexController extends AbstractActionController
 {
@@ -27,7 +27,8 @@ class IndexController extends AbstractActionController
         if ($request->isPost()) {
             $form->setData($request->getPost());
             $message = 'Yes';
-            $this->generateModelFile($form);
+            $this->generateModelToFile($form);
+            $this->generateModelMapperToFile($form);
         }
         return array(
             'message' => $message,
@@ -35,48 +36,39 @@ class IndexController extends AbstractActionController
         );
     }
 
-    protected function generateModelFile($form)
+    protected function generateModelToFile($form)
     {
         $nameSpace = $form->get('namespace')->getValue();
-        $className = $form->get('model_class')->getValue();
+        $className = ucfirst($form->get('model_class')->getValue());
         $tableName = $form->get('table_name')->getValue();
+        $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
+        $gnerator = new ModelGenerator($dbAdapter, $className, $nameSpace, $tableName);
+
+        $class = $gnerator->generate();
+
         $fileName = $form->get('path')->getValue() . '/' . $className . '.php';
-
-        if (file_exists($fileName)) {
-            $class = FileGenerator::fromReflection(new ClassReflection($nameSpace));
-        } else {
-            $class = ClassGenerator::fromReflection(new ClassReflection('CodeGenerator\Template\Model'));
-        }
-
-        $class->setName($className);
-        $class->setNamespaceName($nameSpace);
-
-        $cols = $this->getTabelCols($tableName);
-        $exchangeArrayBody = '';
-        foreach ($cols as $col) {
-            if (! $class->hasProperty($col->getName())) {
-                $class->addProperty($col->getName(), '', 'public');
-            }
-            $exchangeArrayBody .= '$this->' . $col->getName() . ' = (!empty($data[\'' . $col->getName() . '\'])) ? $data[\'' . $col->getName() . '\'] : null;';
-        }
-
-        $method = new MethodGenerator();
-        $method->setName('exchangeArray')
-            ->setParameter('data')
-            ->setBody($exchangeArrayBody);
-        $class->setMethod($method);
-
         $file = new FileGenerator();
         $file->setClass($class);
         file_put_contents($fileName, $file->generate());
     }
 
-    protected function getTabelCols($tableName)
-    {
-        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
 
-        $metadata = new Metadata($dbAdapter);
-        $table = $metadata->getTable($tableName);
-        return $table->getColumns();
+
+    protected function generateModelMapperToFile($form)
+    {
+        $nameSpace = $form->get('namespace')->getValue();
+        $modelClassName = ucfirst($form->get('model_class')->getValue());
+        $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
+        $tableName = '';
+        $gnerator = new ModelMapperGenerator($dbAdapter, $modelClassName, $nameSpace, $tableName);
+
+        $class = $gnerator->generate();
+
+        $fileName = $form->get('path')->getValue() . '/' . $className . '.php';
+        $file = new FileGenerator();
+        $file->setClass($class);
+        file_put_contents($fileName, $file->generate());
     }
+
+
 }

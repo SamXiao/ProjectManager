@@ -1,85 +1,41 @@
 <?php
 namespace Application\Model;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\InputFilter\InputFilter;
-	
 
- class Project implements InputFilterAwareInterface
- {
-     public $id;
-     public $name;
-     public $description;
+class Member
+{
 
-     public function exchangeArray($data)
-     {
-         $this->id     = (!empty($data['id'])) ? $data['id'] : null;
-         $this->name = (!empty($data['name'])) ? $data['name'] : null;
-         $this->description  = (!empty($data['description'])) ? $data['description'] : null;
-     }
+    public $id = '';
 
-     // Add content to these methods:
-     public function setInputFilter(InputFilterInterface $inputFilter)
-     {
-         throw new \Exception("Not used");
-     }
+    public $username = '';
 
-     public function getInputFilter()
-     {
-         if (!$this->inputFilter) {
-             $inputFilter = new InputFilter();
+    public $password = '';
 
-             $inputFilter->add(array(
-                 'name'     => 'id',
-                 'required' => true,
-                 'filters'  => array(
-                     array('name' => 'Int'),
-                 ),
-             ));
+    public $name = '';
 
-             $inputFilter->add(array(
-                 'name'     => 'description',
-                 'required' => true,
-                 'filters'  => array(
-                     array('name' => 'StripTags'),
-                     array('name' => 'StringTrim'),
-                 ),
-                 'validators' => array(
-                     array(
-                         'name'    => 'StringLength',
-                         'options' => array(
-                             'encoding' => 'UTF-8',
-                             'min'      => 1,
-                             'max'      => 100,
-                         ),
-                     ),
-                 ),
-             ));
+    public $email = '';
 
-             $inputFilter->add(array(
-                 'name'     => 'name',
-                 'required' => true,
-                 'filters'  => array(
-                     array('name' => 'StripTags'),
-                     array('name' => 'StringTrim'),
-                 ),
-                 'validators' => array(
-                     array(
-                         'name'    => 'StringLength',
-                         'options' => array(
-                             'encoding' => 'UTF-8',
-                             'min'      => 1,
-                             'max'      => 100,
-                         ),
-                     ),
-                 ),
-             ));
+    public $create_time = '';
 
-             $this->inputFilter = $inputFilter;
-         }
+    public function exchangeArray($data)
+    {
+        $this->id = (! empty($data['id'])) ? $data['id'] : null;
+        $this->username = (! empty($data['username'])) ? $data['username'] : null;
+        $this->password = (! empty($data['password'])) ? $data['password'] : null;
+        $this->name = (! empty($data['name'])) ? $data['name'] : null;
+        $this->email = (! empty($data['email'])) ? $data['email'] : null;
+        $this->create_time = (! empty($data['create_time'])) ? $data['create_time'] : null;
+    }
 
-         return $this->inputFilter;
-     }
+    public function toArray($data)
+    {
+        $data = array();
+        (! empty($this->id)) ? $data['id'] = $this->id : null;
+        (! empty($this->username)) ? $data['username'] = $this->username : null;
+        (! empty($this->password)) ? $data['password'] = $this->password : null;
+        (! empty($this->name)) ? $data['name'] = $this->name : null;
+        (! empty($this->email)) ? $data['email'] = $this->email : null;
+        (! empty($this->create_time)) ? $data['create_time'] = $this->create_time : null;
+        return $data;
+    }
+}
 
-
- }

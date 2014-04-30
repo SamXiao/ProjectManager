@@ -4,6 +4,7 @@ namespace CodeGenerator\Service;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Db\Metadata\Metadata;
+use Zend\Code\Generator\ParameterGenerator;
 
 class ModelMapperGenerator
 {
@@ -24,6 +25,18 @@ class ModelMapperGenerator
 return $resultSet;';
 
     protected $_toArrayMethodTemplate = '(!empty($this-><{$colName}>)) ? $data[\'<{$colName}>\'] = $this-><{$colName}> : null;';
+
+    protected $_updateMethodTemplate = '$data = $<{$paramName}>->toArray();
+ $id = (int) $<{$paramName}>->id;
+ if ($id == 0) {
+     $this->tableGateway->insert($data);
+ } else {
+     if ($this->get<{$model}>($id)) {
+         $this->tableGateway->update($data, array(\'id\' => $id));
+     } else {
+         throw new \Exception(\'Album id does not exist\');
+     }
+ }';
 
     public function __construct($dbAdapter, $modelName, $nameSpace, $tableName)
     {
@@ -49,6 +62,7 @@ return $resultSet;';
         $class->addMethodFromGenerator($this->generateFetchAllMethod());
         $class->addMethodFromGenerator($this->generateGetModelMethod());
         $class->addMethodFromGenerator($this->generateSaveModelMethod());
+        $class->addMethodFromGenerator($this->generateDeleteMethod());
 
         return $class;
     }
@@ -98,14 +112,19 @@ return $resultSet;';
     protected function generateSaveModelMethod()
     {
         $method = new MethodGenerator();
-        $method->setName('get' . $this->modelClassName);
-        $body = '$id  = (int) $id;
- $rowset = $this->tableGateway->select(array(\'id\' => $id));
- $row = $rowset->current();
- if (!$row) {
-     throw new \Exception("Could not find row $id");
- }
- return $row;';
+        $method->setName('save' . $this->modelClassName);
+        $method->setParameter(new ParameterGenerator(lcfirst($this->modelClassName), $this->modelClassName));
+        $body = str_replace('<{$paramName}>', lcfirst($this->modelClassName), $this->_updateMethodTemplate);
+        $body = str_replace('<{$model}>', $this->modelClassName, $body);
+        $method->setBody($body);
+        return $method;
+    }
+
+    protected function generateDeleteMethod()
+    {
+        $method = new MethodGenerator();
+        $method->setName('delete' . $this->modelClassName);
+        $body = '$this->tableGateway->delete(array(\'id\' => (int) $id));';
         $method->setBody($body);
         return $method;
     }

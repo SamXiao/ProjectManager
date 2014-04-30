@@ -30,10 +30,7 @@
 
      public function saveAlbum(Project $album)
      {
-         $data = array(
-             'name' => $album->name,
-             'description'  => $album->description,
-         );
+         $data = $album->toArray();
 
          $id = (int) $album->id;
          if ($id == 0) {

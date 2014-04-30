@@ -17,7 +17,38 @@ class MemberTable
     public function fetchAll()
     {
         $resultSet = $this->tableGateway->select();
-                    return $resultSet;
+        return $resultSet;
+    }
+
+    public function getMember()
+    {
+        $id  = (int) $id;
+         $rowset = $this->tableGateway->select(array('id' => $id));
+         $row = $rowset->current();
+         if (!$row) {
+             throw new \Exception("Could not find row $id");
+         }
+         return $row;
+    }
+
+    public function saveMember(Member $member)
+    {
+        $data = $member->toArray();
+         $id = (int) $member->id;
+         if ($id == 0) {
+             $this->tableGateway->insert($data);
+         } else {
+             if ($this->getMember($id)) {
+                 $this->tableGateway->update($data, array('id' => $id));
+             } else {
+                 throw new \Exception('Album id does not exist');
+             }
+         }
+    }
+
+    public function deleteMember()
+    {
+        $this->tableGateway->delete(array('id' => (int) $id));
     }
 
 

@@ -64,7 +64,7 @@ class IndexController extends AbstractActionController
 
         $class = $gnerator->generate();
 
-        $fileName = $form->get('path')->getValue() . '/' . $className . '.php';
+        $fileName = $form->get('path')->getValue() . '/' . $class->getName() . '.php';
         $file = new FileGenerator();
         $file->setClass($class);
         file_put_contents($fileName, $file->generate());

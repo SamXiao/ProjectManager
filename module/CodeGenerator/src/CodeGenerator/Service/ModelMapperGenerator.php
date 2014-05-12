@@ -5,6 +5,7 @@ use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Db\Metadata\Metadata;
 use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\PropertyGenerator;
 
 class ModelMapperGenerator
 {
@@ -56,7 +57,11 @@ return $resultSet;';
         $class = new ClassGenerator($this->className, $this->nameSpace);
 
         $class->addUse('Zend\Db\TableGateway\TableGateway');
-        $class->addProperty('tableGateway', null, 'protected');
+        $class->addUse('Zend\ServiceManager\ServiceManager');
+        $class->addUse('Zend\Db\ResultSet\ResultSet;');
+        $class->addProperty('serviceManager', null, PropertyGenerator::FLAG_PROTECTED);
+        $class->addProperty('tableGateway', null, PropertyGenerator::FLAG_PROTECTED);
+        $class->addProperty('TABLE_NAME', $this->tableName, PropertyGenerator::FLAG_CONSTANT);
 
         $class->addMethodFromGenerator($this->generateConstructMethod());
         $class->addMethodFromGenerator($this->generateFetchAllMethod());
@@ -71,8 +76,12 @@ return $resultSet;';
     {
         $method = new MethodGenerator();
         $method->setName('__construct');
-        $method->setParameter(new ParameterGenerator('tableGateway', 'TableGateway'));
-        $method->setBody('$this->tableGateway = $tableGateway;');
+        $method->setParameter(new ParameterGenerator('serviceManager', 'ServiceManager'));
+        $method->setBody('$this->serviceManager = $serviceManager;
+$dbAdapter = $serviceManager->get(\'Zend\Db\Adapter\Adapter\');
+$resultSetPrototype = new ResultSet();
+$resultSetPrototype->setArrayObjectPrototype(new Project());
+$this->tableGateway = new TableGateway(self::TABLE_NAME, $dbAdapter, null, $resultSetPrototype);');
         return $method;
     }
 

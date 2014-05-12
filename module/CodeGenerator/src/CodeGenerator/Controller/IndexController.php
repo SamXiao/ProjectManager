@@ -59,7 +59,7 @@ class IndexController extends AbstractActionController
         $nameSpace = $form->get('namespace')->getValue();
         $modelClassName = ucfirst($form->get('model_class')->getValue());
         $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
-        $tableName = '';
+        $tableName = $form->get('table_name')->getValue();
         $gnerator = new ModelMapperGenerator($dbAdapter, $modelClassName, $nameSpace, $tableName);
 
         $class = $gnerator->generate();

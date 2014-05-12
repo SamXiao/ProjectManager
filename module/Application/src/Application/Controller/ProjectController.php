@@ -11,8 +11,6 @@ class ProjectController extends AbstractActionController
 
     public function indexAction()
     {
-        $this->getProjectTable();
-        var_dump($this->projectTable);exit();
         return new ViewModel(array(
             'projects' => $this->getProjectTable()->fetchAll()
         ));

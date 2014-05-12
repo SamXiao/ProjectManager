@@ -4,6 +4,7 @@ namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Db\ResultSet\ResultSet;;
 
 class ProjectTable
 {

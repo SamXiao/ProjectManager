@@ -11,6 +11,11 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Application\Model\ProjectTable;
+use Zend\ServiceManager\ServiceManager;
+use Zend\Db\ResultSet\ResultSet;
+use Application\Model\Project;
+use Zend\Db\TableGateway\TableGateway;
 
 class Module
 {
@@ -34,6 +39,19 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ),
             ),
+        );
+    }
+
+    public function getServiceConfig()
+    {
+        return array(
+            'factories' => array(
+                'Model\ProjectTable' => function (ServiceManager $sm)
+                {
+                    $table = new ProjectTable($sm);
+                    return $table;
+                },
+            )
         );
     }
 }

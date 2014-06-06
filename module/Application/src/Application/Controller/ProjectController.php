@@ -2,7 +2,7 @@
 namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Helper\ViewModel;
+use Zend\View\Model\ViewModel;
 
 class ProjectController extends AbstractActionController
 {

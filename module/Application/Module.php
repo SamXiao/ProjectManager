@@ -11,11 +11,11 @@ namespace Application;
 
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
-use Application\Model\ProjectTable;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Db\ResultSet\ResultSet;
-use Application\Model\Project;
 use Zend\Db\TableGateway\TableGateway;
+use Application\Model\ProjectTable;
+use Application\Model\TaskTable;
 
 class Module
 {
@@ -49,6 +49,11 @@ class Module
                 'Model\ProjectTable' => function (ServiceManager $sm)
                 {
                     $table = new ProjectTable($sm);
+                    return $table;
+                },
+                'Model\TaskTable' => function (ServiceManager $sm)
+                {
+                    $table = new TaskTable($sm);
                     return $table;
                 },
             )

@@ -4,16 +4,16 @@ namespace Application\Model;
 
 use Zend\Db\TableGateway\TableGateway;
 use Zend\ServiceManager\ServiceManager;
-use Zend\Db\ResultSet\ResultSet;
+use Zend\Db\ResultSet\ResultSet;;
 
-class ProjectTable
+class TaskTable
 {
 
     protected $serviceManager = null;
 
     protected $tableGateway = null;
 
-    const TABLE_NAME = 'pm_project';
+    const TABLE_NAME = 'pm_task';
 
     public function __construct(ServiceManager $serviceManager)
     {
@@ -30,7 +30,7 @@ class ProjectTable
         return $resultSet;
     }
 
-    public function getProject()
+    public function getTask()
     {
         $id  = (int) $id;
          $rowset = $this->tableGateway->select(array('id' => $id));
@@ -41,14 +41,14 @@ class ProjectTable
          return $row;
     }
 
-    public function saveProject(Project $project)
+    public function saveTask(Task $task)
     {
-        $data = $project->toArray();
-         $id = (int) $project->id;
+        $data = $task->toArray();
+         $id = (int) $task->id;
          if ($id == 0) {
              $this->tableGateway->insert($data);
          } else {
-             if ($this->getProject($id)) {
+             if ($this->getTask($id)) {
                  $this->tableGateway->update($data, array('id' => $id));
              } else {
                  throw new \Exception('Album id does not exist');
@@ -56,7 +56,7 @@ class ProjectTable
          }
     }
 
-    public function deleteProject()
+    public function deleteTask()
     {
         $this->tableGateway->delete(array('id' => (int) $id));
     }

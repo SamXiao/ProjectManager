@@ -7,7 +7,7 @@ return array(
         'ZendDeveloperTools',
         'BjyProfiler',
     	'CodeGenerator',
-        'BootsrapView',
+      //  'BootsrapView',
         'Components',
     ),
 

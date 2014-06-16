@@ -90,7 +90,7 @@ return array(
 
     'view_helpers' => array(
         'invokables' => array(
-            'formRow' => 'Components\Form\View\Helper\FormRow',
+            'formRow' => 'Components\View\Helper\Form\FormRow',
             'pageHeader' => 'Components\View\Helper\Page\Header'
         ),
     ),

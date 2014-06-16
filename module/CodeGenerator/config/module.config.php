@@ -44,10 +44,10 @@ return array(
         ),
     ),
 
-    'view_helpers' => array(
-        'invokables' => array(
-            'formRow' => 'BootsrapView\Form\View\Helper\FormRow',
-        ),
-    ),
+//     'view_helpers' => array(
+//         'invokables' => array(
+//             'formRow' => 'BootsrapView\Form\View\Helper\FormRow',
+//         ),
+//     ),
 
 );

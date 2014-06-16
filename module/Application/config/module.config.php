@@ -87,6 +87,13 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+
+    'view_helpers' => array(
+        'invokables' => array(
+            'formRow' => 'Components\Form\View\Helper\FormRow',
+            'pageHeader' => 'Components\View\Helper\Page\Header'
+        ),
+    ),
     // Placeholder for console routes
     'console' => array(
         'router' => array(

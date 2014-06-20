@@ -1,5 +1,5 @@
 <?php
-namespace Components\View\Helper\Form;
+namespace Components\Form\View\Helper;
 
 
 use Zend\Form\View\Helper\FormSubmit  as ZVHFormSubmit;

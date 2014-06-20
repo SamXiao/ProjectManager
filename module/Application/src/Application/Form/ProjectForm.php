@@ -2,6 +2,8 @@
 namespace Application\Form;
 
 use Zend\Form\Form;
+use Components\Form\Element\ButtonWithIcon;
+use Components\Form\Element\ButtonIcon;
 
 class ProjectForm extends Form
 {
@@ -32,12 +34,23 @@ class ProjectForm extends Form
                 'label' => 'Artist'
             )
         ));
+    }
+
+    public function init(){
         $this->add(array(
             'name' => 'submit',
-            'type' => 'Button',
-            'attributes' => array(
-                'value' => 'Go',
-                'id' => 'submitbutton'
+            'type' => 'submitButton',
+            'options' => array(
+                'label' => 'Submit',
+                'icon' => ButtonIcon::ICON_OK
+            )
+        ));
+        $this->add(array(
+            'name' => 'cancel',
+            'type' => 'cancelButton',
+            'options' => array(
+                'label' => 'Cancel',
+                'icon' => ButtonIcon::ICON_OK
             )
         ));
     }

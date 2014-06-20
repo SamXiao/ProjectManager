@@ -88,15 +88,7 @@ return array(
         ),
     ),
 
-    'view_helpers' => array(
-        'invokables' => array(
-            'pageHeader' => 'Components\View\Helper\Page\Header',
-            'form' => 'Components\View\Helper\Form\Form',
-            'formRow' => 'Components\View\Helper\Form\FormRow',
-            'formButton' => 'Components\View\Helper\Form\FormButton',
-            'formActions' => 'Components\View\Helper\Form\FormActions',
-        ),
-    ),
+
     // Placeholder for console routes
     'console' => array(
         'router' => array(

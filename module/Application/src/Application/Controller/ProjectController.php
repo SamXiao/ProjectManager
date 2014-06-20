@@ -4,6 +4,7 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\ProjectForm;
+use Application\Model\Project;
 
 class ProjectController extends AbstractActionController
 {
@@ -19,8 +20,9 @@ class ProjectController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new ProjectForm();
-        $form->get('submit')->setValue('Add');
+        $sl = $this->getServiceLocator();
+        $form = $sl->get('FormElementManager')->get('\Application\Form\ProjectForm');
+//         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();
         if ($request->isPost()) {

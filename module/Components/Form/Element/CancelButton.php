@@ -3,7 +3,7 @@ namespace Components\Form\Element;
 
 use Zend\Form\Element\Button;
 
-class CancelButton extends Button
+class CancelButton extends Button implements ElementWithIconInterface
 {
     /**
      * Seed attributes
@@ -12,12 +12,17 @@ class CancelButton extends Button
      */
     protected $attributes = array(
         'type' => 'button',
-        'class' => 'btn btn-info'
+        'class' => 'btn btn-light'
     );
 
-    /**
-     * @var array custom options
+	/* (non-PHPdoc)
+     * @see \Components\Form\Element\ElementWithIconInterface::getDefaultIcon()
      */
-    protected $options = array();
+    protected function getDefaultIcon()
+    {
+        // TODO Auto-generated method stub
+        return ButtonIcon::ICON_CANCEL;
+    }
+
 }
 

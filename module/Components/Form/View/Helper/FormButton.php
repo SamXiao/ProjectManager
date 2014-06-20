@@ -4,6 +4,8 @@ namespace Components\Form\View\Helper;
 
 use Zend\Form\ElementInterface;
 use Zend\Form\View\Helper\FormButton  as ZVHFormButton;
+use Zend\Validator\IsInstanceOf;
+use Components\Form\Element\ButtonWithIcon;
 class FormButton extends ZVHFormButton
 {
 
@@ -49,10 +51,14 @@ class FormButton extends ZVHFormButton
 
     protected function renderIcon( ElementInterface $element )
     {
-        $icon = $element->getOption('icon');
+
         $iconHtml = '';
-        if ( $icon ) {
-        	$iconHtml = '<i class="' . $icon . ' bigger-110"></i>';
+        if ( $element instanceof ButtonWithIcon ) {
+            $icon = $element->getOption('icon');
+            if ( !$icon ) {
+                $icon = $element->getDefaultIcon();
+            }
+            $iconHtml = '<i class="' . $icon . ' bigger-110"></i>';
         }
         return $iconHtml;
 

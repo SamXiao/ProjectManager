@@ -42,7 +42,6 @@ class ProjectForm extends Form
             'type' => 'submitButton',
             'options' => array(
                 'label' => 'Submit',
-                'icon' => ButtonIcon::ICON_OK
             )
         ));
         $this->add(array(
@@ -50,7 +49,6 @@ class ProjectForm extends Form
             'type' => 'cancelButton',
             'options' => array(
                 'label' => 'Cancel',
-                'icon' => ButtonIcon::ICON_OK
             )
         ));
     }

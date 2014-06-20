@@ -3,7 +3,7 @@ namespace Components\Form\Element;
 
 use Zend\Form\Element\Button;
 
-class SubmitButton extends Button
+class SubmitButton extends Button implements ElementWithIconInterface
 {
     /**
      * Seed attributes
@@ -15,9 +15,18 @@ class SubmitButton extends Button
         'class' => 'btn btn-info'
     );
 
-    /**
-     * @var array custom options
+
+	/* (non-PHPdoc)
+     * @see \Components\Form\Element\ElementWithIconInterface::getDefaultIcon()
      */
-    protected $options = array();
+    protected function getDefaultIcon()
+    {
+        // TODO Auto-generated method stub
+        return ButtonIcon::ICON_SUBMIT;
+
+    }
+
+
+
 }
 

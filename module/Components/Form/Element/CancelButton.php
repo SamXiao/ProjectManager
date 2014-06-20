@@ -18,10 +18,10 @@ class CancelButton extends Button implements ElementWithIconInterface
 	/* (non-PHPdoc)
      * @see \Components\Form\Element\ElementWithIconInterface::getDefaultIcon()
      */
-    protected function getDefaultIcon()
+    public function getDefaultIcon()
     {
         // TODO Auto-generated method stub
-        return ButtonIcon::ICON_CANCEL;
+        return ElementWithIconInterface::ICON_CANCEL;
     }
 
 }

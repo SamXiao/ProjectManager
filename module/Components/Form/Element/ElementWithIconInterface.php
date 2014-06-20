@@ -8,6 +8,6 @@ interface ElementWithIconInterface
     const ICON_CANCEL = 'icon-arrow-left';
     const ICON_SUBMIT = 'icon-arrow-right';
 
-    protected function getDefaultIcon();
+    public function getDefaultIcon();
 }
 

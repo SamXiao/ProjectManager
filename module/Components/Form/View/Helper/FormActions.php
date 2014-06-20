@@ -2,10 +2,40 @@
 namespace Components\Form\View\Helper;
 
 
-use Zend\Form\View\Helper\FormSubmit  as ZVHFormSubmit;
-use Zend\Form\FieldsetInterface;
-class FormActions extends ZVHFormSubmit
+use Zend\Form\View\Helper\AbstractHelper;
+use Zend\Form\View\Helper\FormInput;
+use Zend\Form\ElementInterface;
+use Zend\Form\View\Helper\FormElement;
+
+class FormActions extends AbstractHelper
 {
+    /**
+     * Form element helper instance
+     *
+     * @var FormElement
+     */
+    protected $elementHelper;
+
+    /**
+     * Generate an opening form tag
+     *
+     * @param  null|FormInterface $form
+     * @return string
+     */
+    public function openTag()
+    {
+        return '<div class="clearfix form-actions"><div class="col-md-offset-3 col-md-9">';
+    }
+
+    /**
+     * Generate a closing form tag
+     *
+     * @return string
+     */
+    public function closeTag()
+    {
+        return '</div></div>';
+    }
 
     /**
      * Invoke helper as functor
@@ -15,43 +45,53 @@ class FormActions extends ZVHFormSubmit
      * @param  ElementInterface|null $element
      * @return string|FormInput
      */
-    public function __invoke(FieldsetInterface $fieldset = null)
+    public function __invoke()
     {
-        if (!$fieldset) {
+        if ( func_num_args() > 0 ){
+            $args = func_get_args();
+            $content = '';
+            foreach ( $args as $element) {
+                if ($element instanceof ElementInterface) {
+                	$content .= $this->renderElement( $element );
+                }
+            }
+
+            $openTag = $this->openTag();
+            $closeTag = $this->closeTag();
+
+
+            return $openTag . $content . $closeTag;
+        }else{
             return $this;
         }
 
-        return $this->render($element);
     }
 
-
+    public function renderElement( ElementInterface $element ){
+        $elementHelper = $this->getElementHelper();
+        return $elementHelper->render($element);
+    }
 
     /**
-     * Render a <button> element from the provided $element
+     * Retrieve the FormElement helper
      *
-     * @param  ElementInterface $element
-     * @throws Exception\DomainException
-     * @return string
+     * @return FormElement
      */
-    public function render(FieldsetInterface $element)
+    protected function getElementHelper()
     {
-        $name = $element->getName();
-        if ($name === null || $name === '') {
-            throw new Exception\DomainException(sprintf(
-                '%s requires that the element has an assigned name; none discovered',
-                __METHOD__
-            ));
+        if ($this->elementHelper) {
+            return $this->elementHelper;
         }
 
-        $attributes          = $element->getAttributes();
-        $attributes['name']  = $name;
-        $attributes['type']  = $this->getType($element);
-        $label = $element->getValue();
+        if (method_exists($this->view, 'plugin')) {
+            $this->elementHelper = $this->view->plugin('form_element');
+        }
 
-        return sprintf(
-            '<button %s >' . $label . '</button>',
-            $this->createAttributesString($attributes)
-        );
+        if (!$this->elementHelper instanceof FormElement) {
+            $this->elementHelper = new FormElement();
+        }
+
+        return $this->elementHelper;
     }
 
 }

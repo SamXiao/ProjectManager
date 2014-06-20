@@ -6,6 +6,7 @@ use Zend\Form\ElementInterface;
 use Zend\Form\View\Helper\FormButton  as ZVHFormButton;
 use Zend\Validator\IsInstanceOf;
 use Components\Form\Element\ButtonWithIcon;
+use Components\Form\Element\ElementWithIconInterface;
 class FormButton extends ZVHFormButton
 {
 
@@ -53,7 +54,7 @@ class FormButton extends ZVHFormButton
     {
 
         $iconHtml = '';
-        if ( $element instanceof ButtonWithIcon ) {
+        if ( $element instanceof ElementWithIconInterface ) {
             $icon = $element->getOption('icon');
             if ( !$icon ) {
                 $icon = $element->getDefaultIcon();

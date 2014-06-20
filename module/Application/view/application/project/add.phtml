@@ -1,26 +1,22 @@
- <?php
+<?php
+$title = 'Add new project';
+$this->headTitle($title);
+?>
+<?= $this->pageHeader( $title )?>
+<?php
 
- $title = 'Add new project';
- $this->headTitle($title);
- ?>
- <?= $this->pageHeader( $title )?>
- <?php
- $form->setAttribute('action', $this->url('home/default', array('controller'=>'project', 'action' => 'add')));
- $form->setAttribute('class', 'form-horizontal');
- $form->setAttribute('role', 'form');
- $form->prepare();
+$form->setAttribute('action', $this->url('home/default', array(
+    'controller' => 'project',
+    'action' => 'add'
+)));
+$form->setAttribute('class', 'form-horizontal');
+$form->setAttribute('role', 'form');
+$form->prepare();
 
- echo $this->form()->openTag($form);
- echo $this->formHidden($form->get('id'));
- echo $this->formRow($form->get('name'));
- echo $this->formRow($form->get('description'));
- ?>
- <div class="clearfix form-actions">
-     <div class="col-md-offset-3 col-md-9">
-        <?= $this->formButton($form->get('submit'));?>
-        <?= $this->formButton($form->get('cancel'));?>
-     </div>
- </div>
- <?php
- echo $this->form()->closeTag();
- ?>
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('name'));
+echo $this->formRow($form->get('description'));
+echo $this->formActions( $form->get('cancel'), $form->get('submit'));
+echo $this->form()->closeTag();
+?>

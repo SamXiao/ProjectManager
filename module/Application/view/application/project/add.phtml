@@ -6,6 +6,8 @@
  <?= $this->pageHeader( $title )?>
  <?php
  $form->setAttribute('action', $this->url('album', array('action' => 'add')));
+ $form->setAttribute('class', 'form-horizontal');
+ $form->setAttribute('role', 'form');
  $form->prepare();
 
  echo $this->form()->openTag($form);

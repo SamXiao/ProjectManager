@@ -9,7 +9,7 @@ class ProjectForm extends Form
     public function __construct($name = null)
     {
         // we want to ignore the name passed
-        parent::__construct('album');
+        parent::__construct('project');
 
         $this->add(array(
             'name' => 'id',
@@ -18,8 +18,11 @@ class ProjectForm extends Form
         $this->add(array(
             'name' => 'name',
             'type' => 'Text',
+            'attributes' => array(
+                'placeholder' => 'test',
+             ),
             'options' => array(
-                'label' => 'Title'
+                'label' => 'Title',
             )
         ));
         $this->add(array(

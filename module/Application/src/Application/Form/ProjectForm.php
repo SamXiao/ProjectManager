@@ -19,10 +19,10 @@ class ProjectForm extends Form
             'name' => 'name',
             'type' => 'Text',
             'attributes' => array(
-                'placeholder' => 'test',
-             ),
+                'placeholder' => 'test'
+            ),
             'options' => array(
-                'label' => 'Title',
+                'label' => 'Title'
             )
         ));
         $this->add(array(
@@ -34,7 +34,7 @@ class ProjectForm extends Form
         ));
         $this->add(array(
             'name' => 'submit',
-            'type' => 'Submit',
+            'type' => 'Button',
             'attributes' => array(
                 'value' => 'Go',
                 'id' => 'submitbutton'

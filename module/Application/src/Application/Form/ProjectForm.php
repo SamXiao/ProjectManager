@@ -2,11 +2,13 @@
 namespace Application\Form;
 
 use Zend\Form\Form;
-use Components\Form\Element\ButtonWithIcon;
-use Components\Form\Element\ButtonIcon;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ProjectForm extends Form
 {
+    public static function getInstance( ServiceLocatorInterface $sl){
+        return $sl->get('FormElementManager')->get('\Application\Form\ProjectForm');
+    }
 
     public function __construct($name = null)
     {

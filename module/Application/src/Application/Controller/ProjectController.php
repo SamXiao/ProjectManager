@@ -20,8 +20,7 @@ class ProjectController extends AbstractActionController
 
     public function addAction()
     {
-        $sl = $this->getServiceLocator();
-        $form = $sl->get('FormElementManager')->get('\Application\Form\ProjectForm');
+        $form = ProjectForm::getInstance( $this->getServiceLocator() );
 //         $form->get('submit')->setValue('Add');
 
         $request = $this->getRequest();

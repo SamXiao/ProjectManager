@@ -18,6 +18,7 @@ class LoginController extends AbstractActionController
 
     public function indexAction()
     {
+        var_dump( (class_exists('Application\Controller\LoginController1')));exit();
         $form = LoginForm::getInstance( $this->getServiceLocator() );
 //         $form->get('submit')->setValue('Add');
 

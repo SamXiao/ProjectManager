@@ -5,6 +5,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 interface AutoBuildInterface
 {
-    public function getInstance( ServiceLocatorInterface $sl );
+    protected static $serviceLocator;
+    public static function getInstance( ServiceLocatorInterface $sl );
 }
 

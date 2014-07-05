@@ -20,10 +20,10 @@ class ModelMapper
         $this->tableGateway = new TableGateway(self::TABLE_NAME, $dbAdapter, null, $resultSetPrototype);
     }
 
-    public function __construct(TableGateway $tableGateway)
-    {
-        $this->tableGateway = $tableGateway;
-    }
+//     public function __construct(TableGateway $tableGateway)
+//     {
+//         $this->tableGateway = $tableGateway;
+//     }
 
     public function fetchAll()
     {

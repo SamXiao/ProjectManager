@@ -5,11 +5,13 @@ use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable\CredentialTreatmentAdapter as AuthDbTableAdapter;
+use SamFramework\src\Form\AutoBuildInterface;
 
-class LoginForm extends Form
+class LoginForm extends Form implements AutoBuildInterface
 {
     public static function getInstance( ServiceLocatorInterface $sl){
-        return $sl->get('FormElementManager')->get('\Application\Form\LoginForm');
+        self::$serviceLocator = $sl;
+        return self::$serviceLocator->get('FormElementManager')->get('\Application\Form\LoginForm');
     }
 
     public function __construct($name = null)
@@ -62,7 +64,7 @@ class LoginForm extends Form
     {
         $auth = new AuthenticationService();
 
-        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $dbAdapter = self::$serviceLocator->get('Zend\Db\Adapter\Adapter');
         $authAdapter = new AuthDbTableAdapter($dbAdapter, 'core_member', 'username', 'password');
         $authAdapter->setIdentity( $this->get('name') );
         $authAdapter->setCredential( $this->get('password') );

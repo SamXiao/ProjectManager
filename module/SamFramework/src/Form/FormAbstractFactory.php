@@ -7,12 +7,20 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class FormAbstractFactory implements AbstractFactoryInterface
 {
 
-    public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
+    public function canCreateServiceWithName( ServiceLocatorInterface $serviceLocator, $name, $requestedName )
     {
-    	return true;
+        if ( class_exists( $requestedName ) ) {
+            $class = new \ReflectionClass( $requestedName );
+            if ( $class->implementsInterface( 'SamFramework\src\Form\AutoBuildInterface' ) ) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
-    {}
+    public function createServiceWithName( ServiceLocatorInterface $serviceLocator, $name, $requestedName )
+    {
+        return new $requestedName( $serviceLocator );
+    }
 }
 

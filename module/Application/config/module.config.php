@@ -69,7 +69,7 @@ return array(
         'invokables' => array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Project' => 'Application\Controller\ProjectController',
-            'Application\Controller\Login' => 'Application\Controller\LoginController'
+            'Application\Controller\User' => 'Application\Controller\UserController'
         ),
     ),
     'view_manager' => array(

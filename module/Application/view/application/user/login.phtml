@@ -6,15 +6,15 @@ $this->headTitle($title);
 <?php
 
 $form->setAttribute('action', $this->url('home/default', array(
-    'controller' => 'project',
-    'action' => 'add'
+    'controller' => 'user',
+    'action' => 'login'
 )));
 $form->setAttribute('class', 'form-horizontal');
 $form->setAttribute('role', 'form');
 $form->prepare();
 
 echo $this->form()->openTag($form);
-echo $this->formRow($form->get('name'));
+echo $this->formRow($form->get('username'));
 echo $this->formRow($form->get('password'));
 echo $this->formActions( $form->get('submit'));
 echo $this->form()->closeTag();

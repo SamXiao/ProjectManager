@@ -1,11 +1,10 @@
 <?php
-namespace SamFramework\src\Form;
+namespace SamFramework\src\Core;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 interface AutoBuildInterface
 {
-    protected static $serviceLocator;
     public static function getInstance( ServiceLocatorInterface $sl );
 }
 

@@ -11,7 +11,7 @@
  * file.
  */
 $dbParams = array(
-    'database'  => 'project_management',
+    'database'  => 'wds',
     'username'  => 'root',
     'password'  => '',
     'hostname'  => 'localhost'

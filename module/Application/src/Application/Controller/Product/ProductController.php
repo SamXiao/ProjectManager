@@ -1,22 +1,24 @@
 <?php
-namespace Application\Controller;
+namespace Application\Controller\Product;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Application\Form\ProjectForm;
 use Application\Model\Project;
 
-class ProjectController extends AbstractActionController
+class ProductController extends AbstractActionController
 {
 
     protected $projectTable;
 
     public function indexAction()
     {
-        $model = $this->getServiceLocator()->get('\Application\Model\Product\ProductTable');
-//         return new ViewModel(array(
-//             'projects' => $this->getProjectTable()->fetchAll()
-//         ));
+
+        $viewModel = new ViewModel(array(
+            'products' => $this->getProductTable()->fetchAll()
+        ));
+        $viewModel->setTemplate( 'Application/Product/product/index');
+        return $viewModel;
     }
 
     public function addAction()
@@ -49,10 +51,10 @@ class ProjectController extends AbstractActionController
     public function deleteAction()
     {}
 
-    public function getProjectTable()
+    public function getProductTable()
     {
         if (! $this->projectTable) {
-            $this->projectTable = $this->getServiceLocator()->get('Model\ProjectTable');
+            $this->projectTable = $this->getServiceLocator()->get('\Application\Model\Product\ProductTable');
         }
 
         return $this->projectTable;

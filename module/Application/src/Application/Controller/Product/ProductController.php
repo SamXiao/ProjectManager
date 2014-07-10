@@ -1,5 +1,5 @@
 <?php
-namespace Application\Controller\Product;
+namespace Application\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -40,9 +40,12 @@ class ProductController extends AbstractActionController
                 return $this->redirect()->toRoute('album');
             }
         }
-        return array(
-            'form' => $form
-        );
+
+        $viewModel = new ViewModel(array(
+             'form' => $form
+        ));
+        $viewModel->setTemplate( 'Application/Product/product/index');
+        return $viewModel;
     }
 
     public function editAction()

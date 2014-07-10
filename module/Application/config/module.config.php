@@ -70,7 +70,7 @@ return array(
             'Application\Controller\Index' => 'Application\Controller\IndexController',
             'Application\Controller\Project' => 'Application\Controller\ProjectController',
             'Application\Controller\User' => 'Application\Controller\UserController',
-            'Application\Controller\Product' => 'Application\Controller\Product\ProductController'
+            'Application\Controller\Product' => 'Application\Controller\ProductController'
         ),
     ),
     'view_manager' => array(

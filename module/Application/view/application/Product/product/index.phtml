@@ -6,7 +6,7 @@
  <div class="page-header">
     <h1>
         <?= $this->escapeHtml($title); ?>
-        <small><a href="<?= $this->url('home/default', array('controller'=>'product', 'action'=>'add'));?>">新增商品</a></small>
+        <small><a href="<?= $this->url('home/default', array('controller'=>'product', 'action'=>'add'));?>"><i class="ace-icon glyphicon glyphicon-plus"></i>新增商品</a></small>
     </h1>
  </div>
 
@@ -29,9 +29,13 @@
                 <td><?= $this->escapeHtml($product->category_id);?></td>
                 <td><?= $this->escapeHtml($product->short_desc);?></td>
                 <td></td>
-                <td>
-                    <a href="<?= $this->basePath('product/edit/id/' . $project->id);?>">Edit</a>
-                    <a href="<?= $this->basePath('product/delete/id/' . $project->id);?>">Edit</a>
+                <td align="right">
+                    <a href="<?= $this->basePath('product/edit/id/' . $project->id);?>">
+                        <i class="ace-icon glyphicon glyphicon-pencil"></i>Edit
+                    </a>
+                    <a href="<?= $this->basePath('product/delete/id/' . $project->id);?>">
+                        <i class="ace-icon glyphicon glyphicon-remove"></i>Delete
+                    </a>
                  </td>
             </tr>
             <?php endforeach; ?>

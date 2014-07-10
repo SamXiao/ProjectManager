@@ -1,6 +1,6 @@
  <?php
 
- $title = 'Projects';
+ $title = '商品管理';
  $this->headTitle($title);
  ?>
  <div class="page-header">
@@ -26,8 +26,8 @@
             <?php foreach ($products as $product) : ?>
             <tr>
                 <td><?= $this->escapeHtml($product->name);?></td>
-                <td><?= $this->escapeHtml($project->category_id);?></td>
-                <td><?= $this->escapeHtml($project->short_desc);?></td>
+                <td><?= $this->escapeHtml($product->category_id);?></td>
+                <td><?= $this->escapeHtml($product->short_desc);?></td>
                 <td></td>
                 <td>
                     <a href="<?= $this->basePath('product/edit/id/' . $project->id);?>">Edit</a>

@@ -1,88 +1,165 @@
 <?php
 namespace CodeGenerator\Service;
 
+use Zend\Code\Generator\ClassGenerator;
+use Zend\Code\Reflection\ClassReflection;
+use Zend\Code\Generator\FileGenerator;
+
 abstract class AbstractGenerator
 {
-    protected  $_namespace;
-    protected  $_className;
-    protected  $_tableName;
-    protected  $_fileName;
 
-	/**
-     * @return the $_namespace
+    protected $namespace;
+
+    protected $className;
+
+    protected $tableName;
+
+    protected $filePath;
+
+    protected $fullClassName;
+
+    protected $templateClassName;
+
+    protected $classGenerator;
+
+    /**
+     * TODO 重写 *
+     */
+    protected $dbAdapter;
+
+    public function __construct($dbAdapter, $className, $namespace, $tableName)
+    {
+        $this->dbAdapter = $dbAdapter;
+        $this->setNamespace($namespace);
+        $this->setClassName($className);
+        $this->setTableName($tableName);
+    }
+
+    abstract public function generate();
+
+    /**
+     *
+     * @return the $namespace
      */
     public function getNamespace()
     {
-        return $this->_namespace;
+        return $this->namespace;
     }
 
-	/**
-     * @return the $_className
+    /**
+     *
+     * @return the $className
      */
     public function getClassName()
     {
-        return $this->_className;
+        return $this->className;
     }
 
-	/**
-     * @return the $_tableName
+    /**
+     *
+     * @return the $tableName
      */
     public function getTableName()
     {
-        return $this->_tableName;
+        return $this->tableName;
     }
-
-	/**
-     * @param field_type $_namespace
-     */
-    public function setNamespace( $_namespace )
-    {
-        $this->_namespace = $_namespace;
-    }
-
-	/**
-     * @param field_type $_className
-     */
-    public function setClassName( $_className )
-    {
-        $this->_className = $_className;
-    }
-
-	/**
-     * @param field_type $_tableName
-     */
-    public function setTableName( $_tableName )
-    {
-        $this->_tableName = $_tableName;
-    }
-
 
     /**
-     * @return the $_fileName
+     *
+     * @param fieldtype $namespace
      */
-    public function getFileName()
+    public function setNamespace($namespace)
     {
-        if ( !$this->_fileName ) {
-        	$fileName = ;
+        $this->namespace = trim($namespace, '\\');
+    }
+
+    /**
+     *
+     * @param fieldtype $className
+     */
+    public function setClassName($className)
+    {
+        $this->className = ucfirst(trim($className, '\\'));
+    }
+
+    /**
+     *
+     * @param fieldtype $tableName
+     */
+    public function setTableName($tableName)
+    {
+        $this->tableName = $tableName;
+    }
+
+    /**
+     *
+     * @return the $fileName
+     */
+    public function getFilePath()
+    {
+        if (! $this->filePath) {
+            $arrNamespace = explode('\\', $this->getNamespace());
+            array_unshift($arrNamespace, $arrNamespace[0], 'src');
+            array_push($arrNamespace, $this->getClassName() . '.php');
+            $this->filePath = implode(DIRECTORY_SEPARATOR, $arrNamespace);
         }
-        return $this->_fileName;
+        return $this->filePath;
     }
 
-	/**
-     * @param field_type $_fileName
+    /**
+     *
+     * @param fieldtype $fileName
      */
-    public function setFileName( $_fileName )
+    public function setFilePath($filePath)
     {
-        $this->_fileName = $_fileName;
+        $this->filePath = $filePath;
     }
 
-	protected function getClassByFileName()
+    public function getFullClassName()
     {
-
+        if (! $this->fullClassName) {
+            $this->fullClassName = $this->getNamespace() . '\\' . $this->getClassName();
+        }
+        return $this->fullClassName;
     }
 
-    protected function writeClassToFile(){
+    /**
+     *
+     * @return the $templateClassName
+     */
+    public function getTemplateClassName()
+    {
+        if (empty($this->templateClassName)) {
+            throw new \Exception('你需要指定一个模板文件', 500);
+        }
+        return $this->templateClassName;
+    }
 
+    /**
+     *
+     * @return ClassGenerator
+     */
+    public function getClassGenerator()
+    {
+        if (! $this->classGenerator) {
+            if (class_exists($this->getFullClassName())) {
+                $classReflection = new ClassReflection($this->getFullClassName());
+                $this->setFileName($classReflection->getFileName());
+            } else {
+                $classReflection = new ClassReflection($this->getTemplateClassName());
+            }
+            $this->classGenerator = ClassGenerator::fromReflection($classReflection);
+        }
+
+        return $this->classGenerator;
+    }
+
+    protected function writeClassToFile()
+    {
+        $fileGenerator = new FileGenerator();
+        $fileGenerator->setClass($this->getClassGenerator());
+        file_put_contents($this->getFilePath(), $fileGenerator->generate());
+        chmod($this->getFilePath(), 755);
     }
 }
 

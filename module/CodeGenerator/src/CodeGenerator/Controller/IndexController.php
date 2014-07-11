@@ -39,17 +39,14 @@ class IndexController extends AbstractActionController
     protected function generateModelToFile($form)
     {
         $nameSpace = $form->get('namespace')->getValue();
-        $className = ucfirst($form->get('model_class')->getValue());
+        $className = $form->get('model_class')->getValue();
         $tableName = $form->get('table_name')->getValue();
         $dbAdapter = $this->serviceLocator->get('Zend\Db\Adapter\Adapter');
         $gnerator = new ModelGenerator($dbAdapter, $className, $nameSpace, $tableName);
 
-        $class = $gnerator->generate();
+        $gnerator->generate();
 
-        $fileName = $form->get('path')->getValue() . '/' . $className . '.php';
-        $file = new FileGenerator();
-        $file->setClass($class);
-        file_put_contents($fileName, $file->generate());
+
     }
 
 

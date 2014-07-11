@@ -3,7 +3,6 @@ namespace CodeGenerator\Template;
 
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Form\Annotation\InputFilter;
 
 class ModelTemplate implements InputFilterAwareInterface
 {
@@ -12,7 +11,7 @@ class ModelTemplate implements InputFilterAwareInterface
     /*
      * (non-PHPdoc) @see \Zend\InputFilter\InputFilterAwareInterface::setInputFilter()
      */
-    public function setInputFilter(InputFilterInterface $inputFilter)
+    public function setInputFilter()
     {
         throw new \Exception("Not used");
     }

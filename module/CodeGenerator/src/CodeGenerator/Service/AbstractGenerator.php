@@ -99,7 +99,7 @@ abstract class AbstractGenerator
     {
         if (! $this->filePath) {
             $arrNamespace = explode('\\', $this->getNamespace());
-            array_unshift($arrNamespace, $arrNamespace[0], 'src');
+            array_unshift($arrNamespace, 'module', $arrNamespace[0], 'src');
             array_push($arrNamespace, $this->getClassName() . '.php');
             $this->filePath = implode(DIRECTORY_SEPARATOR, $arrNamespace);
         }
@@ -151,6 +151,7 @@ abstract class AbstractGenerator
             $this->classGenerator = ClassGenerator::fromReflection($classReflection);
         }
 
+        $this->classGenerator->setNamespaceName($this->getNamespace());
         return $this->classGenerator;
     }
 

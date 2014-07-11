@@ -21,10 +21,21 @@ class ModelGenerator extends AbstractGenerator
      */
     public function generate()
     {
+        $this->generateUse();
         $this->generateProperties();
         $this->generateExchangeArrayMethod();
         $this->generateToArrayMethod();
         $this->writeClassToFile();
+    }
+
+    protected function generateUse()
+    {
+        $classGenerator = $this->getClassGenerator();
+        $classGenerator->addUse('Zend\InputFilter\InputFilterAwareInterface');
+        $classGenerator->addUse('Zend\InputFilter\InputFilterInterface');
+        $classGenerator->setImplementedInterfaces(array(
+            'InputFilterAwareInterface'
+        ));
     }
 
     protected function generateProperties()
@@ -70,6 +81,7 @@ class ModelGenerator extends AbstractGenerator
             $classGenerator->addMethodFromGenerator($method);
         }
     }
+
 
     protected function getTabelCols()
     {

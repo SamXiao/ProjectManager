@@ -1,39 +1,38 @@
 <?php
 namespace CodeGenerator\Service;
 
-use Zend\Code\Generator\ClassGenerator;
-use Zend\Code\Generator\MethodGenerator;
-use Zend\Db\Metadata\Metadata;
 use Zend\Code\Generator\ParameterGenerator;
-use Zend\Code\Generator\PropertyGenerator;
 
 class ModelMapperGenerator extends AbstractGenerator
 {
 
-    public $modelClassName;
+    protected $templateClassName = 'CodeGenerator\Template\ModelMapperTemplate';
 
-    protected $_fetchAllMethodTemplate = '$resultSet = $this->tableGateway->select();
-return $resultSet;';
-
-
-    protected $_updateMethodTemplate = '$data = $<{$paramName}>->toArray();
- $id = (int) $<{$paramName}>->id;
- if ($id == 0) {
-     $this->tableGateway->insert($data);
- } else {
-     if ($this->get<{$model}>($id)) {
-         $this->tableGateway->update($data, array(\'id\' => $id));
-     } else {
-         throw new \Exception(\'Album id does not exist\');
-     }
- }';
+    protected $modelClassName;
 
     public function setClassName($className)
     {
-        $this->className = $className . 'Table';
-        $this->modelClassName = $className;
+        $this->className = ucfirst(trim($className, '\\')) . 'Table';
+        $this->setModelClassName($className);
     }
 
+    /**
+     *
+     * @return the $modelClassName
+     */
+    public function getModelClassName()
+    {
+        return $this->modelClassName;
+    }
+
+    /**
+     *
+     * @param fieldtype $modelClassName
+     */
+    public function setModelClassName($modelClassName)
+    {
+        $this->modelClassName = ucfirst(trim($modelClassName, '\\'));
+    }
 
     /**
      *
@@ -41,63 +40,46 @@ return $resultSet;';
      */
     public function generate()
     {
-        $class = new ClassGenerator($this->className, $this->nameSpace);
-        $class->addUse('SamFramework\src\Model\TableAbstract');
-        $class->setExtendedClass('TableAbstract');
-        $class->addProperty('TABLE_NAME', $this->tableName, PropertyGenerator::FLAG_CONSTANT);
-        $class->addProperty('MODEL_CLASS_NAME', $this->nameSpace . '\\' . $this->modelClassName, PropertyGenerator::FLAG_CONSTANT);
-
-        $class->addMethodFromGenerator($this->generateFetchAllMethod());
-        $class->addMethodFromGenerator($this->generateGetModelMethod());
-        $class->addMethodFromGenerator($this->generateSaveModelMethod());
-        $class->addMethodFromGenerator($this->generateDeleteMethod());
-
-        return $class;
+        $this->generateProperties();
+        $this->generateGetModelMethod();
+        $this->generateSaveModelMethod();
+        $this->generateDeleteMethod();
+        $this->writeClassToFile();
     }
 
-    protected function generateFetchAllMethod()
+    protected function generateProperties()
     {
-        $method = new MethodGenerator();
-        $method->setName('fetchAll');
-        $method->setBody($this->_fetchAllMethodTemplate);
-        return $method;
+        $classGenerator = $this->getClassGenerator();
+        $modelClassFullName = $this->getNamespace() . '\\' . $this->getModelClassName();
+//         $classGenerator->getProperty('TABLE_NAME')->setDefaultValue($this->tableName);
+//         $classGenerator->getProperty('MODEL_CLASS_NAME')->setDefaultValue($modelClassFullName);
     }
 
     protected function generateGetModelMethod()
     {
-        $method = new MethodGenerator();
-        $method->setName('get' . $this->modelClassName);
-        $method->setParameter(new ParameterGenerator('id'));
-        $body = '$id  = (int) $id;
- $rowset = $this->tableGateway->select(array(\'id\' => $id));
- $row = $rowset->current();
- if (!$row) {
-     throw new \Exception("Could not find row $id");
- }
- return $row;';
-        $method->setBody($body);
-        return $method;
+        $classGenerator = $this->getClassGenerator();
+        $methodGenerator = $classGenerator->getMethod('getModel');
+        $methodGenerator->setName('get' . $this->getModelClassName());
     }
 
     protected function generateSaveModelMethod()
     {
-        $method = new MethodGenerator();
-        $method->setName('save' . $this->modelClassName);
-        $method->setParameter(new ParameterGenerator(lcfirst($this->modelClassName), $this->modelClassName));
-        $body = str_replace('<{$paramName}>', lcfirst($this->modelClassName), $this->_updateMethodTemplate);
-        $body = str_replace('<{$model}>', $this->modelClassName, $body);
-        $method->setBody($body);
-        return $method;
+        $classGenerator = $this->getClassGenerator();
+        $methodGenerator = $classGenerator->getMethod('saveModel');
+        $methodGenerator->setName('save' . $this->modelClassName);
+        $methodGenerator->setParameter(new ParameterGenerator(lcfirst($this->getModelClassName()), $this->getModelClassName()));
+        $body = $methodGenerator->getBody();
+        $body = str_replace('$model', '$' . $this->getModelClassName(), $body);
+        $body = str_replace('getModel', 'get' . $this->getModelClassName(), $body);
+        $methodGenerator->setBody($body);
     }
 
     protected function generateDeleteMethod()
     {
-        $method = new MethodGenerator();
-        $method->setName('delete' . $this->modelClassName);
-        $method->setParameter(new ParameterGenerator('id'));
-        $body = '$this->tableGateway->delete(array(\'id\' => (int) $id));';
-        $method->setBody($body);
-        return $method;
+        $classGenerator = $this->getClassGenerator();
+        $methodGenerator = $classGenerator->getMethod('deleteModel');
+        $methodGenerator->setName('delete' . $this->modelClassName);
+        $methodGenerator->setParameter(new ParameterGenerator('id'));
     }
 }
 

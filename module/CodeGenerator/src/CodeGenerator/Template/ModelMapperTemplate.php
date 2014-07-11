@@ -2,52 +2,57 @@
 namespace CodeGenerator\Template;
 
 use SamFramework\src\Model\TableAbstract;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ProductTable extends TableAbstract
+class ModelMapperTemplate extends TableAbstract
 {
 
-    const TABLE_NAME = 'product';
+    const TABLE_NAME = '';
+
     const MODEL_CLASS_NAME = 'Application\Model\Product\Product';
 
     public function fetchAll()
     {
-        $resultSet = $this->tableGateway->select();
+        $resultSet = $this->getTableGateway()->select();
         return $resultSet;
     }
 
-    public function getProduct()
+    public function getModel()
     {
-        $id  = (int) $id;
-         $rowset = $this->tableGateway->select(array('id' => $id));
-         $row = $rowset->current();
-         if (!$row) {
-             throw new \Exception("Could not find row $id");
-         }
-         return $row;
+        $tableGateway = $this->getTableGateway();
+        $id = (int) $id;
+        $rowset = $tableGateway->select(array(
+            'id' => $id
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $id");
+        }
+        return $row;
     }
 
-    public function saveProduct(Product $product)
+    public function saveModel()
     {
-        $data = $product->toArray();
-         $id = (int) $product->id;
-         if ($id == 0) {
-             $this->tableGateway->insert($data);
-         } else {
-             if ($this->getProduct($id)) {
-                 $this->tableGateway->update($data, array('id' => $id));
-             } else {
-                 throw new \Exception('Album id does not exist');
-             }
-         }
+        $tableGateway = $this->getTableGateway();
+        $data = $model->toArray();
+        $id = (int) $model->id;
+        if ($id == 0) {
+            $tableGateway->insert($data);
+        } else {
+            if ($this->getModel($id)) {
+                $tableGateway->update($data, array(
+                    'id' => $id
+                ));
+            } else {
+                throw new \Exception( TABLE_NAME . ' id does not exist');
+            }
+        }
     }
 
-    public function deleteProduct()
+    public function deleteModel()
     {
-        $this->tableGateway->delete(array('id' => (int) $id));
+        $this->tableGateway->delete(array(
+            'id' => (int) $id
+        ));
     }
-
-
-
 }
 

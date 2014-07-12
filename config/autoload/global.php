@@ -10,38 +10,22 @@
  * control, so do not include passwords or other sensitive information in this
  * file.
  */
-$dbParams = array(
-    'database'  => 'wds',
-    'username'  => 'root',
-    'password'  => '',
-    'hostname'  => 'localhost'
+return array(
+    'db' => array(
+        'driver' => 'Pdo',
+        'dsn' => 'mysql:dbname=wds;host=localhost',
+        'database' => 'wds',
+        'username' => 'root',
+        'password' => '',
+        'hostname' => 'localhost',
+        'driver_options' => array(
+            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
+        )
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            // 'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory'
+            'Zend\Db\Adapter\Adapter' => 'BjyProfiler\Db\Adapter\ProfilingAdapterFactory'
+        )
+    )
 );
- return array(
-//      'db' => array(
-//          'driver'         => 'Pdo',
-//          'dsn'            => 'mysql:dbname=project_management;host=localhost',
-//          'driver_options' => array(
-//              PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES \'UTF8\''
-//          ),
-//      ),
-     'service_manager' => array(
-         'factories' => array(
-//              'Zend\Db\Adapter\Adapter'
-//                      => 'Zend\Db\Adapter\AdapterServiceFactory',
-             'Zend\Db\Adapter\Adapter' => function ($sm) use ($dbParams) {
-                 $adapter = new BjyProfiler\Db\Adapter\ProfilingAdapter(array(
-                     'driver'    => 'Pdo',
-                     'dsn'       => 'mysql:dbname='.$dbParams['database'].';host='.$dbParams['hostname'],
-                     'database'  => $dbParams['database'],
-                     'username'  => $dbParams['username'],
-                     'password'  => $dbParams['password'],
-                     'hostname'  => $dbParams['hostname'],
-                 ));
-
-                 $adapter->setProfiler(new BjyProfiler\Db\Profiler\Profiler);
-                 $adapter->injectProfilingStatementPrototype();
-                 return $adapter;
-             },
-         ),
-     ),
- );

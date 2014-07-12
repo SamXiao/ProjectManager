@@ -1,18 +1,17 @@
 <?php
-namespace SamFramework\src\Form;
+namespace SamFramework\Core;
 
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use SamFramework\src\Core\AutoBuildInterface;
 
-class FormAbstractFactory implements AbstractFactoryInterface
+class AutoBuildAbstractFactory implements AbstractFactoryInterface
 {
 
     public function canCreateServiceWithName( ServiceLocatorInterface $serviceLocator, $name, $requestedName )
     {
         if ( class_exists( $requestedName ) ) {
             $class = new \ReflectionClass( $requestedName );
-            if ( $class->implementsInterface( 'SamFramework\src\Core\AutoBuildInterface' ) ) {
+            if ( $class->implementsInterface( 'SamFramework\Core\AutoBuildInterface' ) ) {
                 return true;
             }
         }

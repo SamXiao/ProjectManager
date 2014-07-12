@@ -1,57 +1,56 @@
 <?php
-
 namespace Application\Model\Product;
 
-class CategoryTable extends \SamFramework\src\Model\TableAbstract
+use SamFramework\Model\AbstractModelMapper;
+
+class CategoryTable extends AbstractModelMapper
 {
 
-    const TABLE_NAME = 'category';
+    protected $tableName = 'category';
 
-    const MODEL_CLASS_NAME = 'Application\\Model\\Product\\Category';
+    protected $modelClassName = 'Application\\Model\\Product\\Category';
 
     public function fetchAll()
     {
         $resultSet = $this->getTableGateway()->select();
-                return $resultSet;
+        return $resultSet;
     }
 
-    public function getCategory()
+    public function getCategory($id)
     {
         $tableGateway = $this->getTableGateway();
-                $id = (int) $id;
-                $rowset = $tableGateway->select(array(
-                    'id' => $id
-                ));
-                $row = $rowset->current();
-                if (! $row) {
-                    throw new \Exception("Could not find row $id");
-                }
-                return $row;
+        $id = (int) $id;
+        $rowset = $tableGateway->select(array(
+            'id' => $id
+        ));
+        $row = $rowset->current();
+        if (! $row) {
+            throw new \Exception("Could not find row $id");
+        }
+        return $row;
     }
 
     public function deleteCategory($id)
     {
         $this->tableGateway->delete(array(
-                    'id' => (int) $id
-                ));
+            'id' => (int) $id
+        ));
     }
 
     public function saveCategory(Category $category)
     {
         $tableGateway = $this->getTableGateway();
-                $data = $category->toArray();
-                $id = (int) $category->id;
-                if ($id == 0) {
-                    $tableGateway->insert($data);
-                } else {
-                    if ($this->getCategory($id)) {
-                        $tableGateway->update($data, array(
-                            'id' => $id
-                        ));
-                    }
-                }
+        $data = $category->toArray();
+        $id = (int) $category->id;
+        if ($id == 0) {
+            $tableGateway->insert($data);
+        } else {
+            if ($this->getCategory($id)) {
+                $tableGateway->update($data, array(
+                    'id' => $id
+                ));
+            }
+        }
     }
-
-
 }
 

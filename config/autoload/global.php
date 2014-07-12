@@ -25,7 +25,15 @@ return array(
     'service_manager' => array(
         'factories' => array(
             // 'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory'
-            'Zend\Db\Adapter\Adapter' => 'BjyProfiler\Db\Adapter\ProfilingAdapterFactory'
+            'Zend\Db\Adapter\Adapter' => function ($serviceManager)
+            {
+                $adapterFactory = new BjyProfiler\Db\Adapter\ProfilingAdapterFactory();
+                $adapter = $adapterFactory->createService($serviceManager);
+
+                \Zend\Db\TableGateway\Feature\GlobalAdapterFeature::setStaticAdapter($adapter);
+
+                return $adapter;
+            }
         )
     )
 );

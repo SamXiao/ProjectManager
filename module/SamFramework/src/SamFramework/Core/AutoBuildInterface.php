@@ -1,5 +1,5 @@
 <?php
-namespace SamFramework\src\Core;
+namespace SamFramework\Core;
 
 use Zend\ServiceManager\ServiceLocatorInterface;
 

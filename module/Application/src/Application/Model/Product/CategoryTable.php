@@ -2,20 +2,12 @@
 
 namespace Application\Model\Product;
 
-use Zend\Db\TableGateway\AbstractTableGateway;
-class ProductTable extends AbstractTableGateway
+class CategoryTable extends \SamFramework\src\Model\TableAbstract
 {
-    public function __construct()
-    {
-        $this->table = 'my_table';
-        $this->featureSet = new Feature\FeatureSet();
-        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
-        $this->initialize();
-    }
 
-    const TABLE_NAME = 'product';
+    const TABLE_NAME = 'category';
 
-    const MODEL_CLASS_NAME = 'Application\\Model\\Product\\Product';
+    const MODEL_CLASS_NAME = 'Application\\Model\\Product\\Category';
 
     public function fetchAll()
     {
@@ -23,7 +15,7 @@ class ProductTable extends AbstractTableGateway
                 return $resultSet;
     }
 
-    public function getProduct()
+    public function getCategory()
     {
         $tableGateway = $this->getTableGateway();
                 $id = (int) $id;
@@ -37,22 +29,22 @@ class ProductTable extends AbstractTableGateway
                 return $row;
     }
 
-    public function deleteProduct($id)
+    public function deleteCategory($id)
     {
         $this->tableGateway->delete(array(
                     'id' => (int) $id
                 ));
     }
 
-    public function saveProduct(Product $product)
+    public function saveCategory(Category $category)
     {
         $tableGateway = $this->getTableGateway();
-                $data = $product->toArray();
-                $id = (int) $product->id;
+                $data = $category->toArray();
+                $id = (int) $category->id;
                 if ($id == 0) {
                     $tableGateway->insert($data);
                 } else {
-                    if ($this->getProduct($id)) {
+                    if ($this->getCategory($id)) {
                         $tableGateway->update($data, array(
                             'id' => $id
                         ));

@@ -2,7 +2,10 @@
 
 namespace Application\Model\Product;
 
-class Product
+use Zend\InputFilter\InputFilterAwareInterface;
+use Zend\InputFilter\InputFilterInterface;
+
+class Product implements InputFilterAwareInterface
 {
 
     public $id = '';
@@ -19,6 +22,16 @@ class Product
 
     public $update_time = '';
 
+    public function setInputFilter(\Zend\InputFilter\InputFilterInterface $inputFilter)
+    {
+        throw new \Exception("Not used");
+    }
+
+    public function getInputFilter()
+    {
+        throw new \Exception("Not used");
+    }
+
     public function exchangeArray($data)
     {
         $this->id = (!empty($data['id'])) ? $data['id'] : null;
@@ -30,7 +43,7 @@ class Product
         $this->update_time = (!empty($data['update_time'])) ? $data['update_time'] : null;
     }
 
-    public function toArray($data)
+    public function toArray()
     {
         $data = array();
         (!empty($this->id)) ? $data['id'] = $this->id : null;

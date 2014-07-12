@@ -9,5 +9,14 @@ class TestGenerator extends AbstractGenerator
     {
         return $this->getFilePath();
     }
+	/* (non-PHPdoc)
+     * @see \CodeGenerator\Service\AbstractGenerator::generate()
+     */
+    public function generate()
+    {
+        // TODO Auto-generated method stub
+
+    }
+
 }
 

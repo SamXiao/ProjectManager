@@ -150,7 +150,7 @@ abstract class AbstractGenerator
             }
             $this->classGenerator = ClassGenerator::fromReflection($classReflection);
         }
-
+        $this->classGenerator->setName($this->getClassName());
         $this->classGenerator->setNamespaceName($this->getNamespace());
         return $this->classGenerator;
     }
@@ -160,7 +160,7 @@ abstract class AbstractGenerator
         $fileGenerator = new FileGenerator();
         $fileGenerator->setClass($this->getClassGenerator());
         file_put_contents($this->getFilePath(), $fileGenerator->generate());
-        chmod($this->getFilePath(), 755);
+        chmod($this->getFilePath(), 0777);
     }
 }
 

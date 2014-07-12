@@ -11,7 +11,7 @@ class ModelTemplate implements InputFilterAwareInterface
     /*
      * (non-PHPdoc) @see \Zend\InputFilter\InputFilterAwareInterface::setInputFilter()
      */
-    public function setInputFilter()
+    public function setInputFilter( InputFilterInterface $inputFilter )
     {
         throw new \Exception("Not used");
     }

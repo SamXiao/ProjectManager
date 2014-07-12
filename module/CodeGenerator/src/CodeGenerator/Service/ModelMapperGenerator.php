@@ -2,6 +2,8 @@
 namespace CodeGenerator\Service;
 
 use Zend\Code\Generator\ParameterGenerator;
+use Zend\Code\Generator\PropertyGenerator;
+use Zend\Code\Generator\MethodGenerator;
 
 class ModelMapperGenerator extends AbstractGenerator
 {
@@ -51,8 +53,8 @@ class ModelMapperGenerator extends AbstractGenerator
     {
         $classGenerator = $this->getClassGenerator();
         $modelClassFullName = $this->getNamespace() . '\\' . $this->getModelClassName();
-//         $classGenerator->getProperty('TABLE_NAME')->setDefaultValue($this->tableName);
-//         $classGenerator->getProperty('MODEL_CLASS_NAME')->setDefaultValue($modelClassFullName);
+        $classGenerator->addProperty('TABLE_NAME', $this->getTableName(), PropertyGenerator::FLAG_CONSTANT);
+        $classGenerator->addProperty('MODEL_CLASS_NAME', $modelClassFullName, PropertyGenerator::FLAG_CONSTANT);
     }
 
     protected function generateGetModelMethod()
@@ -65,13 +67,13 @@ class ModelMapperGenerator extends AbstractGenerator
     protected function generateSaveModelMethod()
     {
         $classGenerator = $this->getClassGenerator();
-        $methodGenerator = $classGenerator->getMethod('saveModel');
-        $methodGenerator->setName('save' . $this->modelClassName);
-        $methodGenerator->setParameter(new ParameterGenerator(lcfirst($this->getModelClassName()), $this->getModelClassName()));
-        $body = $methodGenerator->getBody();
-        $body = str_replace('$model', '$' . $this->getModelClassName(), $body);
-        $body = str_replace('getModel', 'get' . $this->getModelClassName(), $body);
-        $methodGenerator->setBody($body);
+        $methodName = 'save' . $this->getModelClassName();
+        if (! $classGenerator->hasMethod($methodName)) {
+            $methodGenerator = new MethodGenerator($methodName);
+            $methodGenerator->setParameter(new ParameterGenerator(lcfirst($this->getModelClassName()), $this->getModelClassName()));
+            $methodGenerator->setBody($this->getSaveModeMethodBody());
+            $classGenerator->addMethodFromGenerator($methodGenerator);
+        }
     }
 
     protected function generateDeleteMethod()
@@ -80,6 +82,22 @@ class ModelMapperGenerator extends AbstractGenerator
         $methodGenerator = $classGenerator->getMethod('deleteModel');
         $methodGenerator->setName('delete' . $this->modelClassName);
         $methodGenerator->setParameter(new ParameterGenerator('id'));
+    }
+
+    protected function getSaveModeMethodBody()
+    {
+        return '$tableGateway = $this->getTableGateway();
+        $data = $' . lcfirst($this->getModelClassName()) . '->toArray();
+        $id = (int) $' . lcfirst($this->getModelClassName()) . '->id;
+        if ($id == 0) {
+            $tableGateway->insert($data);
+        } else {
+            if ($this->get' . $this->getModelClassName() . '($id)) {
+                $tableGateway->update($data, array(
+                    \'id\' => $id
+                ));
+            }
+        }';
     }
 }
 

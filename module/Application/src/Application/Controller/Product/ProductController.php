@@ -1,5 +1,5 @@
 <?php
-namespace Application\Controller;
+namespace Application\Controller\Product;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;

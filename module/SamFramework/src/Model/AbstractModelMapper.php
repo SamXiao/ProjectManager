@@ -1,28 +1,16 @@
 <?php
 namespace SamFramework\src\Model;
 
-use SamFramework\src\Core\AutoBuildInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Db\ResultSet\ResultSet;;
+use Zend\Db\ResultSet\ResultSet;
+use SamFramework\src\Core\AbstractAutoBuilder;
 
-abstract class TableAbstract implements AutoBuildInterface
+abstract class AbstractModelMapper extends AbstractAutoBuilder
 {
 
-    const TABLE_NAME = NULL;
     const MODEL_CLASS_NAME = NULL;
     protected static $className = __CLASS__;
-    protected $serviceLocator = null;
     protected $tableGateway = null;
-
-    /**
-     *
-     * @return ServiceLocatorInterface $serviceLocator
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
 
     /**
      *
@@ -31,15 +19,6 @@ abstract class TableAbstract implements AutoBuildInterface
     public function getTableGateway()
     {
         return $this->tableGateway;
-    }
-
-    /**
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator( ServiceLocatorInterface $serviceLocator )
-    {
-        $this->serviceLocator = $serviceLocator;
     }
 
     /**
@@ -62,25 +41,18 @@ abstract class TableAbstract implements AutoBuildInterface
         if ( static::MODEL_CLASS_NAME === null ) {
             throw new \Exception('You must setup MODEL_CLASS_NAME', 500);
         }
-        $instance = static::createNewInstance();
-        $instance->setServiceLocator( $sl );
-        $dbAdapter = $sl->get('Zend\Db\Adapter\Adapter');
+
+        $currentClass = get_called_class();
+        $instance = new $currentClass();
+
+
         $resultSetPrototype = new ResultSet();
         $modelClass = static::MODEL_CLASS_NAME;
         $resultSetPrototype->setArrayObjectPrototype(new $modelClass());
 
-        $instance->setTableGateway( new TableGateway(static::TABLE_NAME, $dbAdapter, null, $resultSetPrototype) );
+        $instance->setTableGateway( new TableGateway(static::TABLE_NAME, null, $resultSetPrototype) );
         return $instance;
     }
 
-    /**
-     * @return TableAbstract $instance
-     */
-    protected static function createNewInstance()
-    {
-        $currentClass = get_called_class();
-        $instance = new $currentClass();
-        return $instance;
-    }
 }
 
